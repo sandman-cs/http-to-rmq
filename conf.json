@@ -1,0 +1,11 @@
+{
+    "Broker":"athletic-toucan.rmq.cloudamqp.com",
+    "BrokerUser":"pmg.usr", 
+    "BrokerPwd":"sawdust121",
+    "BrokerExchange":"amq.topic",
+    "BrokerVhost":"/uls",
+    "ChannelCount":4,
+    "SrvPort":"443",
+    "KeyFile": "/etc/letsencrypt/live/usage-stats.pfmlogin.com/privkey.pem",
+    "CrtFile": "/etc/letsencrypt/live/usage-stats.pfmlogin.com/fullchain.pem"
+}

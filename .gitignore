@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+http-to-rmq
 
 # Test binary, built with `go test -c`
 *.test

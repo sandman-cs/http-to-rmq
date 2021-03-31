@@ -18,15 +18,18 @@ func postHandlerWithToken(w http.ResponseWriter, r *http.Request) {
 		r.Body.Close()
 		return
 	}
-	receivedJSON, err := ioutil.ReadAll(r.Body) //This reads raw request body
+	recPayload, err := ioutil.ReadAll(r.Body) //This reads raw request body
 	if err != nil {
 		io.WriteString(w, "Invalid...\n")
 		msg.route = "p.mos.pmg.usage.bad"
-		msg.payload = string(receivedJSON)
+		msg.payload = string(recPayload)
 		messages <- msg
 	} else {
-
-		msg.payload = string(receivedJSON)
+		unzippedPayload, err := gUnzipData(recPayload)
+		if err != nil {
+			unzippedPayload = recPayload
+		}
+		msg.payload = string(unzippedPayload)
 		messages <- msg
 	}
 	io.WriteString(w, "ok\n")
