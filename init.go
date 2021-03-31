@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/streadway/amqp"
@@ -39,7 +38,7 @@ var (
 func init() {
 
 	//Load Default Configuration Values
-	conf.AppName = "Go - PMG usage to RMQ"
+	conf.AppName = "Go - http-to-rmq"
 	conf.AppVer = "1.0"
 	conf.ServerName, _ = os.Hostname()
 	conf.ChannelSize = 2048
@@ -55,19 +54,12 @@ func init() {
 	conf.ProxyHTTPSListenPort = "443"
 
 	//Load Configuration Data
-	dat, _ := ioutil.ReadFile("conf.json")
-	_ = json.Unmarshal(dat, &conf)
+	dat, err := ioutil.ReadFile("conf.json")
+	checkError(err)
+	err = json.Unmarshal(dat, &conf)
+	checkError(err)
 
-	conf.Broker = loadENV("ENV_BROKER", conf.Broker)
-	conf.BrokerUser = loadENV("ENV_BROKERUSER", conf.BrokerUser)
-	conf.BrokerPwd = loadENV("ENV_BROKERPWD", conf.BrokerPwd)
-	conf.BrokerExchange = loadENV("ENV_BROKEREXCHANGE", conf.BrokerExchange)
-	conf.BrokerVhost = loadENV("ENV_BROKERVHOST", conf.BrokerVhost)
-	conf.ChannelCount, _ = strconv.Atoi(loadENV("ENV_CHANNELCOUNT", "4"))
-	conf.SrvPort = loadENV("ENV_SRVPORT", conf.SrvPort)
-
-	
-	//fmt.Println("Config: ", conf)
+	fmt.Println("Config: ", conf)
 
 	messages = make(chan chanToRabbit, conf.ChannelSize)
 
