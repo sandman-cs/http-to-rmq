@@ -12,7 +12,6 @@ func postHandlerWithToken(w http.ResponseWriter, r *http.Request) {
 	msg.route = "p.mos.pmg.usage"
 	authToken := r.Header.Get("X-Auth-Token")
 	if !stringContains(authToken, conf.AuthToken) {
-
 		log.Println("Didn't recieve the Auth Token")
 		r.Body.Close()
 		return
