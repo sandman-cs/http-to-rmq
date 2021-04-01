@@ -98,12 +98,3 @@ func checkError(err error) {
 		log.Println("Error: ", err)
 	}
 }
-
-func loadENV(envARG string, original string) string {
-
-	szTemp := os.Getenv(envARG)
-	if len(szTemp) < 2 {
-		return original
-	}
-	return szTemp
-}

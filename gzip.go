@@ -3,7 +3,9 @@ package main
 import (
 	"bytes"
 	"compress/gzip"
+	"encoding/base64"
 	"io"
+	"log"
 )
 
 func gUnzipData(data []byte) (resData []byte, err error) {
@@ -24,4 +26,19 @@ func gUnzipData(data []byte) (resData []byte, err error) {
 	resData = resB.Bytes()
 
 	return
+}
+
+func gUnzipDataNew(data []byte) []byte {
+
+	szTempData, err := base64.StdEncoding.DecodeString(string(data))
+	if err != nil {
+		log.Println("Payload not gzip")
+		return data
+	}
+	szTemp2, err := gUnzipData(szTempData)
+	if err != nil {
+		log.Println("Payload not gzip")
+		return data
+	}
+	return szTemp2
 }

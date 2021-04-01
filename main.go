@@ -39,8 +39,12 @@ func main() {
 	mux = make(map[string]func(http.ResponseWriter, *http.Request))
 	mux["/"] = postHandlerWithToken
 
-	//server.ListenAndServe()
-	log.Println("Waiting for connections...")
+	if len(conf.CrtFile) < 2 {
+		log.Println("Waiting for HTTP connections...")
+		server.ListenAndServe()
+	}
+
+	log.Println("Waiting for HTTPS connections...")
 	log.Fatal(server.ListenAndServeTLS(conf.CrtFile, conf.KeyFile))
 
 }

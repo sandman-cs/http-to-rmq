@@ -11,9 +11,7 @@ func postHandlerWithToken(w http.ResponseWriter, r *http.Request) {
 	var msg chanToRabbit
 	msg.route = "p.mos.pmg.usage"
 	authToken := r.Header.Get("X-Auth-Token")
-	if stringContains(authToken, conf.AuthToken) {
-		log.Println("Recieved the Auth Token")
-	} else {
+	if !stringContains(authToken, conf.AuthToken) {
 		log.Println("Didn't recieve the Auth Token")
 		r.Body.Close()
 		return
@@ -25,10 +23,7 @@ func postHandlerWithToken(w http.ResponseWriter, r *http.Request) {
 		msg.payload = string(recPayload)
 		messages <- msg
 	} else {
-		unzippedPayload, err := gUnzipData(recPayload)
-		if err != nil {
-			unzippedPayload = recPayload
-		}
+		unzippedPayload := gUnzipDataNew(recPayload)
 		msg.payload = string(unzippedPayload)
 		messages <- msg
 	}
