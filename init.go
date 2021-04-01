@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/streadway/amqp"
@@ -13,22 +14,21 @@ import (
 
 // Configuration File Opjects
 type configuration struct {
-	ServerName           string
-	AppName              string
-	AppVer               string
-	SrvPort              string
-	Broker               string
-	BrokerUser           string
-	BrokerPwd            string
-	BrokerExchange       string
-	BrokerVhost          string
-	ChannelSize          int
-	ChannelCount         int
-	ProxyHTTPSListenPort string //Listening port ofr SSL traffic, default port is 443
-	LogLevel             string
-	CrtFile              string //Path to cert file for SSL
-	KeyFile              string //Path to key file for SSL
-	AuthToken            []string
+	ServerName     string
+	AppName        string
+	AppVer         string
+	SrvPort        string
+	Broker         string
+	BrokerUser     string
+	BrokerPwd      string
+	BrokerExchange string
+	BrokerVhost    string
+	ChannelSize    int
+	ChannelCount   int
+	LogLevel       string
+	CrtFile        string //Path to cert file for SSL
+	KeyFile        string //Path to key file for SSL
+	AuthToken      []string
 }
 
 var (
@@ -50,8 +50,6 @@ func init() {
 	conf.BrokerExchange = "amq.topic"
 	conf.BrokerVhost = "/"
 	conf.ChannelCount = 4
-	conf.AuthToken = append(conf.AuthToken, "ItFDqpKDuEuJGS27+2m5bQ==")
-	conf.ProxyHTTPSListenPort = "443"
 
 	//Load Configuration Data
 	dat, err := ioutil.ReadFile("conf.json")
@@ -59,7 +57,13 @@ func init() {
 	err = json.Unmarshal(dat, &conf)
 	checkError(err)
 
-	fmt.Println("Config: ", conf)
+	conf.Broker = loadENV("ENV_BROKER", conf.Broker)
+	conf.BrokerUser = loadENV("ENV_BROKERUSER", conf.BrokerUser)
+	conf.BrokerPwd = loadENV("ENV_BROKERPWD", conf.BrokerPwd)
+	conf.BrokerExchange = loadENV("ENV_BROKEREXCHANGE", conf.BrokerExchange)
+	conf.BrokerVhost = loadENV("ENV_BROKERVHOST", conf.BrokerVhost)
+	conf.ChannelCount, _ = strconv.Atoi(loadENV("ENV_CHANNELCOUNT", "4"))
+	conf.SrvPort = loadENV("ENV_SRVPORT", conf.SrvPort)
 
 	messages = make(chan chanToRabbit, conf.ChannelSize)
 

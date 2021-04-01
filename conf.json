@@ -6,6 +6,7 @@
     "BrokerVhost":"/uls",
     "ChannelCount":4,
     "SrvPort":"443",
+    "AuthToken": "ItFDqpKDuEuJGS27+2m5bQ==",
     "KeyFile": "/etc/letsencrypt/live/usage-stats.pfmlogin.com/privkey.pem",
     "CrtFile": "/etc/letsencrypt/live/usage-stats.pfmlogin.com/fullchain.pem"
 }
