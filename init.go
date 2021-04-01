@@ -59,7 +59,7 @@ func init() {
 	err = json.Unmarshal(dat, &conf)
 	checkError(err)
 
-	fmt.Println("Config: ", conf)
+	//fmt.Println("Config: ", conf)
 
 	messages = make(chan chanToRabbit, conf.ChannelSize)
 
@@ -93,13 +93,4 @@ func checkError(err error) {
 	if err != nil {
 		log.Println("Error: ", err)
 	}
-}
-
-func loadENV(envARG string, original string) string {
-
-	szTemp := os.Getenv(envARG)
-	if len(szTemp) < 2 {
-		return original
-	}
-	return szTemp
 }
